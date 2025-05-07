@@ -23,16 +23,37 @@ class User(models.Model):
         
 class Client(models.Model):
     client_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, models.DO_NOTHING)
-    phone = models.CharField(max_length=20, blank=True, null=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
-    city = models.CharField(max_length=100, blank=True, null=True)
-    region = models.CharField(max_length=100, blank=True, null=True)
+    user = models.ForeignKey(User, models.DO_NOTHING)
     
     class Meta:
         managed = False
         db_table = 'client'
 
+class Address(models.Model):
+    address_id = models.AutoField(primary_key=True)
+    client = models.ForeignKey(Client, models.DO_NOTHING)
+    street = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    region = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=10)
+    address_type = models.CharField(max_length=10, blank='home', null='home')
+    is_primary = models.BooleanField(default=False)
+    
+    class Meta:
+        managed = False
+        db_table = 'address'
+        
+class Phone(models.Model):
+    phone_id = models.AutoField(primary_key=True)
+    client = models.ForeignKey(Client, models.DO_NOTHING)
+    phone_number = models.CharField(max_length=20)
+    phone_type = models.CharField(max_length=10, blank='mobile', null='mobile')
+    is_primary = models.BooleanField(default=False)
+    
+    class Meta:
+        managed = False
+        db_table = 'phone'
+    
 class Category(models.Model):
     category_id = models.AutoField(primary_key=True)
     category_name = models.CharField(max_length=100)
@@ -40,6 +61,14 @@ class Category(models.Model):
     class Meta:
         managed = False
         db_table = 'category'
+        
+class PaymentMethod(models.Model):
+    method_id = models.AutoField(primary_key=True)
+    method_name = models.CharField(max_length=50)
+    
+    class Meta:
+        managed = False
+        db_table = 'payment_method'
         
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
@@ -96,14 +125,6 @@ class InvoiceItem(models.Model):
     class Meta:
         managed = False
         db_table = 'invoice_item'
-        
-class PaymentMethod(models.Model):
-    method_id = models.AutoField(primary_key=True)
-    method_name = models.CharField(max_length=50)
-    
-    class Meta:
-        managed = False
-        db_table = 'payment_method'
         
 class Payment(models.Model):
     payment_id = models.AutoField(primary_key=True)
