@@ -41,8 +41,7 @@ class Address(models.Model):
     
     class Meta:
         managed = False
-        db_table = 'address'
-        
+        db_table = 'address'        
 class Phone(models.Model):
     phone_id = models.AutoField(primary_key=True)
     client = models.ForeignKey(Client, models.DO_NOTHING)
@@ -53,100 +52,3 @@ class Phone(models.Model):
     class Meta:
         managed = False
         db_table = 'phone'
-    
-class Category(models.Model):
-    category_id = models.AutoField(primary_key=True)
-    category_name = models.CharField(max_length=100)
-    
-    class Meta:
-        managed = False
-        db_table = 'category'
-        
-class PaymentMethod(models.Model):
-    method_id = models.AutoField(primary_key=True)
-    method_name = models.CharField(max_length=50)
-    
-    class Meta:
-        managed = False
-        db_table = 'payment_method'
-        
-class Product(models.Model):
-    product_id = models.AutoField(primary_key=True)
-    category = models.ForeignKey(Category, models.DO_NOTHING)
-    product_name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock = models.IntegerField()
-    is_active = models.IntegerField(blank=True, null=True)
-    
-    class Meta:
-        managed = False
-        db_table = 'product'
-        
-class Cart(models.Model):
-    cart_id = models.AutoField(primary_key=True)
-    client = models.ForeignKey(Client, models.DO_NOTHING)
-    created_at = models.DateTimeField(blank=True, null=True)
-    
-    class Meta:
-        managed = False
-        db_table = 'cart'
-        
-class CartItem(models.Model):
-    cart_item_id = models.AutoField(primary_key=True)
-    cart = models.ForeignKey(Cart, models.DO_NOTHING)
-    product = models.ForeignKey(Product, models.DO_NOTHING)
-    quantity = models.IntegerField()
-    
-    class Meta:
-        managed = False
-        db_table = 'cart_item'
-        
-class Invoice(models.Model):
-    invoice_id = models.AutoField(primary_key=True)
-    client = models.ForeignKey(Client, models.DO_NOTHING)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(blank=True, null=True)
-    status = models.CharField(max_length=9, blank=True, null=True)
-    delivery_method = models.CharField(max_length=8)
-    delivery_address = models.CharField(max_length=255, blank=True, null=True)
-    
-    class Meta:
-        managed = False
-        db_table = 'invoice'
-        
-class InvoiceItem(models.Model):
-    invoice_item_id = models.AutoField(primary_key=True)
-    invoice = models.ForeignKey(Invoice, models.DO_NOTHING)
-    product = models.ForeignKey(Product, models.DO_NOTHING)
-    quantity = models.IntegerField()
-    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    
-    class Meta:
-        managed = False
-        db_table = 'invoice_item'
-        
-class Payment(models.Model):
-    payment_id = models.AutoField(primary_key=True)
-    invoice = models.ForeignKey(Invoice, models.DO_NOTHING)
-    method = models.ForeignKey('PaymentMethod', models.DO_NOTHING)
-    confirmed = models.IntegerField(blank=True, null=True)
-    paid_at = models.DateTimeField(blank=True, null=True)
-    
-    class Meta:
-        managed = False
-        db_table = 'payment'
-        
-class Delivery(models.Model):
-    delivery_id = models.AutoField(primary_key=True)
-    invoice = models.ForeignKey(Invoice, models.DO_NOTHING)
-    provider_name = models.CharField(max_length=100, blank=True, null=True)
-    tracking_code = models.CharField(max_length=100, blank=True, null=True)
-    delivery_status = models.CharField(max_length=10, blank=True, null=True)
-    estimated_delivery_date = models.DateTimeField(blank=True, null=True)
-    delivered_at = models.DateTimeField(blank=True, null=True)
-    observations = models.TextField(blank=True, null=True)
-    
-    class Meta:
-        managed = False
-        db_table = 'delivery'
