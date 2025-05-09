@@ -12,7 +12,7 @@ Esta es la **API de usuarios** del sistema web de **Ferremas**, desarrollada con
 
 ## 🔧 Funcionalidades
 
-- Registro y consulta de usuarios con diferentes roles ('admin', 'client', 'seller', 'warehouse', 'accountant'.)
+- Registro y consulta de usuarios con diferentes roles (admin, client, seller, warehouse, accountant)
 - CRUD completo para clientes
 - Manejo de múltiples direcciones y telefonos por cliente
 - Serialización personalizada con nombre y apellido visible
