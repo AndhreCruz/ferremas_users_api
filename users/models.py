@@ -10,12 +10,14 @@ class Role(models.Model):
         
 class User(models.Model):
     user_id = models.AutoField(primary_key=True)
-    rut = models.CharField(unique = True, max_length=10)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.CharField(unique=True, max_length=100)
-    password = models.CharField(max_length=255)
-    role = models.ForeignKey(Role, models.DO_NOTHING)
+    user_run = models.CharField(unique = True, max_length=14)
+    user_first_name = models.CharField(max_length=100)
+    user_sec_name = models.CharField(max_length=100)
+    user_first_surname = models.CharField(max_length=100)
+    user_sec_surname = models.CharField(max_length=100)
+    user_email = models.CharField(unique=True, max_length=100)
+    user_password = models.CharField(max_length=100)
+    role = models.ForeignKey(Role, on_delete=models.RESTRICT, db_column='role_name')
     
     class Meta:
         managed = False
@@ -23,30 +25,49 @@ class User(models.Model):
         
 class Client(models.Model):
     client_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, models.DO_NOTHING)
+    client_run = models.CharField(unique=True, max_length=14)
+    client_first_name = models.CharField(max_length=100)
+    client_sec_name = models.CharField(max_length=100)
+    client_first_surname = models.CharField(max_length=100)
+    client_sec_surname = models.CharField(max_length=100)
+    client_email = models.CharField(unique=True, max_length=100)
+    client_password = models.CharField(max_length=100)
     
     class Meta:
         managed = False
         db_table = 'client'
 
 class Address(models.Model):
+    ADDRESS_TYPE_CHOICES = [
+        ('home', 'Home'),
+        ('work', 'Work'),
+        ('other', 'Other'),
+    ]
+    
     address_id = models.AutoField(primary_key=True)
-    client = models.ForeignKey(Client, models.DO_NOTHING)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, db_column='client_id')
     street = models.CharField(max_length=255)
     city = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=10)
-    address_type = models.CharField(max_length=10, blank='home', null='home')
+    postal_code = models.CharField(max_length=10, null=True, blank=True)
+    address_type = models.CharField(max_length=10, choices=ADDRESS_TYPE_CHOICES, default='home')
     is_primary = models.BooleanField(default=False)
     
     class Meta:
         managed = False
-        db_table = 'address'        
+        db_table = 'address'  
+              
 class Phone(models.Model):
+    PHONE_TYPE_CHOICES = [
+        ('mobile', 'Mobile'),
+        ('home', 'Home'),
+        ('work', 'Work'),
+    ]
+    
     phone_id = models.AutoField(primary_key=True)
-    client = models.ForeignKey(Client, models.DO_NOTHING)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, db_column='client_id')
     phone_number = models.CharField(max_length=20)
-    phone_type = models.CharField(max_length=10, blank='mobile', null='mobile')
+    phone_type = models.CharField(max_length=10, choices=PHONE_TYPE_CHOICES, default='mobile')
     is_primary = models.BooleanField(default=False)
     
     class Meta:
