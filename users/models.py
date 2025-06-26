@@ -17,7 +17,7 @@ class User(models.Model):
     user_sec_surname = models.CharField(max_length=100)
     user_email = models.CharField(unique=True, max_length=100)
     user_password = models.CharField(max_length=100)
-    role = models.ForeignKey(Role, on_delete=models.RESTRICT, db_column='role_name')
+    role = models.ForeignKey(Role, on_delete=models.RESTRICT, db_column='role_id')
     
     class Meta:
         managed = False
